@@ -22,6 +22,17 @@ class MatStockGap(models.TransientModel):
         'mat.stock.gap.line', 'wizard_id', string='Résultats'
     )
 
+    def _compute_display_name(self):
+        for rec in self:
+            if rec.warehouse_id and rec.date_from and rec.date_to:
+                rec.display_name = 'Écart — %s (%s → %s)' % (
+                    rec.warehouse_id.name,
+                    rec.date_from.strftime('%d/%m/%Y'),
+                    rec.date_to.strftime('%d/%m/%Y'),
+                )
+            else:
+                rec.display_name = 'Analyse Écart de Stock'
+
     def action_compute(self):
         self.ensure_one()
 
@@ -197,15 +208,19 @@ class MatStockGap(models.TransientModel):
         if line_vals:
             self.env['mat.stock.gap.line'].create(line_vals)
 
-        # Reload the same form to display results
+        # Redirect to standalone list view so the user can export to Excel
         return {
             'type': 'ir.actions.act_window',
-            'name': 'Analyse Écart de Stock',
-            'res_model': 'mat.stock.gap',
-            'res_id': self.id,
-            'view_mode': 'form',
-            'target': 'new',
-            'context': self.env.context,
+            'name': 'Analyse Écart de Stock — %s (%s → %s)' % (
+                self.warehouse_id.name,
+                date_from.strftime('%d/%m/%Y'),
+                date_to.strftime('%d/%m/%Y'),
+            ),
+            'res_model': 'mat.stock.gap.line',
+            'view_mode': 'list',
+            'domain': [('wizard_id', '=', self.id)],
+            'target': 'current',
+            'context': {'create': False, 'delete': False},
         }
 
 

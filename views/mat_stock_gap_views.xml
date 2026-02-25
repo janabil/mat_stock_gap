@@ -2,7 +2,7 @@
 <odoo>
 
     <!-- ======================================================
-         Wizard form view
+         Wizard form view — full page, no popup
     ====================================================== -->
     <record id="view_mat_stock_gap_form" model="ir.ui.view">
         <field name="name">mat.stock.gap.form</field>
@@ -10,7 +10,9 @@
         <field name="arch" type="xml">
             <form string="Analyse Écart de Stock">
                 <sheet>
-                    <!-- Parameters -->
+                    <div class="oe_title">
+                        <h2>Analyse Écart de Stock</h2>
+                    </div>
                     <group string="Paramètres">
                         <group>
                             <field name="warehouse_id"/>
@@ -20,8 +22,7 @@
                             <field name="date_to"/>
                         </group>
                     </group>
-
-                    <div class="text-center o_row mb-3">
+                    <div class="o_row mt-3">
                         <button
                             name="action_compute"
                             type="object"
@@ -29,51 +30,47 @@
                             class="btn btn-primary"
                         />
                     </div>
-
-                    <!-- Results -->
-                    <field name="line_ids" nolabel="1">
-                        <list
-                            decoration-danger="qty_gap &gt; 0"
-                            decoration-warning="qty_gap &lt; 0"
-                            decoration-success="qty_gap == 0.0"
-                            create="false"
-                            delete="false"
-                        >
-                            <field name="product_id" string="Produit"/>
-                            <field name="default_code" string="Référence" optional="show"/>
-                            <field name="categ_id" string="Catégorie" optional="show"/>
-                            <field name="qty_start"       string="Stock début"      digits="[16,2]"/>
-                            <field name="qty_received"    string="Réceptions"       digits="[16,2]"/>
-                            <field name="qty_sold"        string="Ventes POS"       digits="[16,2]"/>
-                            <field name="qty_theoretical" string="Stock théorique"  digits="[16,2]"/>
-                            <field name="qty_actual"      string="Stock réel"       digits="[16,2]"/>
-                            <field name="qty_gap"         string="Écart"            digits="[16,2]"/>
-                        </list>
-                    </field>
-
-                    <!-- Legend -->
-                    <div class="mt-2 text-muted small">
-                        <strong>Écart</strong> = Stock théorique − Stock réel
-                        &#160;|&#160;
-                        <span class="text-danger">■ Positif : stock manquant</span>
-                        &#160;
-                        <span class="text-warning">■ Négatif : stock excédentaire</span>
-                        &#160;
-                        <span class="text-success">■ Zéro : aucun écart</span>
-                    </div>
                 </sheet>
             </form>
         </field>
     </record>
 
     <!-- ======================================================
-         Action — opens wizard as a dialog
+         Standalone list view for results — export available here
+    ====================================================== -->
+    <record id="view_mat_stock_gap_line_list" model="ir.ui.view">
+        <field name="name">mat.stock.gap.line.list</field>
+        <field name="model">mat.stock.gap.line</field>
+        <field name="arch" type="xml">
+            <list
+                string="Analyse Écart de Stock — Résultats"
+                decoration-danger="qty_gap &gt; 0"
+                decoration-warning="qty_gap &lt; 0"
+                decoration-success="qty_gap == 0.0"
+                create="false"
+                delete="false"
+            >
+                <field name="product_id"      string="Produit"/>
+                <field name="default_code"    string="Référence"       optional="show"/>
+                <field name="categ_id"        string="Catégorie"       optional="show"/>
+                <field name="qty_start"       string="Stock début"     digits="[16,2]"/>
+                <field name="qty_received"    string="Réceptions"      digits="[16,2]"/>
+                <field name="qty_sold"        string="Ventes POS"      digits="[16,2]"/>
+                <field name="qty_theoretical" string="Stock théorique" digits="[16,2]"/>
+                <field name="qty_actual"      string="Stock réel"      digits="[16,2]"/>
+                <field name="qty_gap"         string="Écart"           digits="[16,2]"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ======================================================
+         Action — wizard form, full page
     ====================================================== -->
     <record id="action_mat_stock_gap" model="ir.actions.act_window">
         <field name="name">Analyse Écart de Stock</field>
         <field name="res_model">mat.stock.gap</field>
         <field name="view_mode">form</field>
-        <field name="target">new</field>
+        <field name="target">current</field>
     </record>
 
     <!-- ======================================================
