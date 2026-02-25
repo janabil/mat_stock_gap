@@ -30,6 +30,29 @@
                             class="btn btn-primary"
                         />
                     </div>
+
+                    <div class="mt-4 p-3" style="background:#f8f9fa; border-radius:6px; border:1px solid #dee2e6;">
+                        <strong>Légende des couleurs dans les résultats :</strong>
+                        <ul class="mb-0 mt-2" style="list-style:none; padding-left:0;">
+                            <li class="mb-1">
+                                <span style="display:inline-block; width:14px; height:14px; background:#dc3545; border-radius:3px; vertical-align:middle; margin-right:6px;"/>
+                                <strong>Rouge — Écart positif :</strong> le stock réel est inférieur au stock théorique.
+                                Produits potentiellement manquants ou perdus.
+                            </li>
+                            <li class="mb-1">
+                                <span style="display:inline-block; width:14px; height:14px; background:#fd7e14; border-radius:3px; vertical-align:middle; margin-right:6px;"/>
+                                <strong>Orange — Écart négatif :</strong> le stock réel est supérieur au stock théorique.
+                                Réception ou retour non enregistré.
+                            </li>
+                            <li>
+                                <span style="display:inline-block; width:14px; height:14px; background:#28a745; border-radius:3px; vertical-align:middle; margin-right:6px;"/>
+                                <strong>Vert — Aucun écart :</strong> stock théorique = stock réel. Tout est correct.
+                            </li>
+                        </ul>
+                        <div class="mt-2 text-muted" style="font-size:0.85em;">
+                            Formule : <strong>Écart = (Stock début &#8722; Ventes POS + Réceptions) &#8722; Stock réel</strong>
+                        </div>
+                    </div>
                 </sheet>
             </form>
         </field>
