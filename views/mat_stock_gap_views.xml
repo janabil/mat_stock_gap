@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ======================================================
+         Wizard form view
+    ====================================================== -->
+    <record id="view_mat_stock_gap_form" model="ir.ui.view">
+        <field name="name">mat.stock.gap.form</field>
+        <field name="model">mat.stock.gap</field>
+        <field name="arch" type="xml">
+            <form string="Analyse Écart de Stock">
+                <sheet>
+                    <!-- Parameters -->
+                    <group string="Paramètres">
+                        <group>
+                            <field name="warehouse_id"/>
+                            <field name="date_from"/>
+                        </group>
+                        <group>
+                            <field name="date_to"/>
+                        </group>
+                    </group>
+
+                    <div class="text-center o_row mb-3">
+                        <button
+                            name="action_compute"
+                            type="object"
+                            string="Calculer l'écart"
+                            class="btn btn-primary"
+                        />
+                    </div>
+
+                    <!-- Results -->
+                    <field name="line_ids" nolabel="1">
+                        <list
+                            decoration-danger="qty_gap &gt; 0"
+                            decoration-warning="qty_gap &lt; 0"
+                            decoration-success="qty_gap == 0.0"
+                            create="false"
+                            delete="false"
+                        >
+                            <field name="product_id" string="Produit"/>
+                            <field name="default_code" string="Référence" optional="show"/>
+                            <field name="categ_id" string="Catégorie" optional="show"/>
+                            <field name="qty_start"       string="Stock début"      digits="[16,2]"/>
+                            <field name="qty_received"    string="Réceptions"       digits="[16,2]"/>
+                            <field name="qty_sold"        string="Ventes POS"       digits="[16,2]"/>
+                            <field name="qty_theoretical" string="Stock théorique"  digits="[16,2]"/>
+                            <field name="qty_actual"      string="Stock réel"       digits="[16,2]"/>
+                            <field name="qty_gap"         string="Écart"            digits="[16,2]"/>
+                        </list>
+                    </field>
+
+                    <!-- Legend -->
+                    <div class="mt-2 text-muted small">
+                        <strong>Écart</strong> = Stock théorique − Stock réel
+                        &#160;|&#160;
+                        <span class="text-danger">■ Positif : stock manquant</span>
+                        &#160;
+                        <span class="text-warning">■ Négatif : stock excédentaire</span>
+                        &#160;
+                        <span class="text-success">■ Zéro : aucun écart</span>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ======================================================
+         Action — opens wizard as a dialog
+    ====================================================== -->
+    <record id="action_mat_stock_gap" model="ir.actions.act_window">
+        <field name="name">Analyse Écart de Stock</field>
+        <field name="res_model">mat.stock.gap</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- ======================================================
+         Menu item — Inventory > Reporting
+    ====================================================== -->
+    <menuitem
+        id="menu_mat_stock_gap"
+        name="Analyse Écart de Stock"
+        parent="stock.menu_warehouse_report"
+        action="action_mat_stock_gap"
+        sequence="100"
+    />
+
+</odoo>
